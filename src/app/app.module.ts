@@ -7,10 +7,14 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+import { BillingComponent } from './billing/billing.component';
+import { ActivationComponent } from './activation/activation.component';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    BillingComponent,
+    ActivationComponent
   ],
   imports: [
     MatButtonModule, MatCardModule,
