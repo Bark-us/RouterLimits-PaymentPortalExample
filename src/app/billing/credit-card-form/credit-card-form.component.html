@@ -1,0 +1,15 @@
+<div class="cell example example4" id="example-4">
+  <form novalidate (ngSubmit)="enterCard()" [formGroup]="stripeTest">
+      <div id="example4-paymentRequest">
+        <!--Stripe paymentRequestButton Element inserted here-->
+      </div>
+      <fieldset>
+        <legend class="card-only" data-tid="elements_examples.form.pay_with_card">Enter card details</legend>
+        <div class="container">
+            <input class="card-name" formControlName="name" type="text" placeholder="Name on card" required>
+          <div id="card-element"></div>
+          <button button mat-button color="primary" type="submit" data-tid="elements_examples.form.donate_button">Submit</button>
+        </div>
+      </fieldset>
+    </form>
+</div>

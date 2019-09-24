@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { pairwise } from 'rxjs/operators';
 
 @Component({
   selector: 'app-billing',
@@ -12,7 +14,7 @@ export class BillingComponent implements OnInit {
   currentPlanString: string;
   lastFour: string;
 
-  constructor() {
+  constructor(private router: Router) {
     this.title = 'Your App Title Here';
     this.plusString = 'Plus';
     this.currentPlanString = 'Plus';

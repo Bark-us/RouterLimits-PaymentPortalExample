@@ -1,0 +1,13 @@
+<div class="full-width" fxLayout="column">
+  <div class="full-width nav-bar-header" fxLayout="row" fxLayoutAlign="start center">
+      <img width="150" alt="Your Logo" src="assets/nav-logo.png">
+  </div>
+  <div class="full-width" *ngIf="!noReturn">
+      <button
+        mat-icon-button
+        aria-label="icon-button navigate back icon"
+        (click)="navArrowClicked()">
+        <mat-icon aria-hidden="false" aria-label="Example back nav icon">arrow_back_ios</mat-icon> {{ backText}}
+    </button>
+  </div>
+</div>

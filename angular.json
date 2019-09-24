@@ -29,7 +29,8 @@
               "src/assets"
             ],
             "styles": [
-              "src/styles.sass"
+              "src/styles.sass",
+              "src/theme.scss"
             ],
             "scripts": []
           },
@@ -73,6 +74,9 @@
           "configurations": {
             "production": {
               "browserTarget": "payment-portal-example:build:production"
+            },
+            "development": {
+              "browserTarget": "payment-portal-example:build:development"
             }
           }
         },

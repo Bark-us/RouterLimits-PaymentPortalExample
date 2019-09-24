@@ -1,0 +1,51 @@
+<div class="full-height activation-signup" fxLayout="row" fxLayoutAlign="center center" fxFlex="100">
+    <mat-card fxFlex="50" fxLayoutAlign="center center">
+      <div fxLayout="row" fxLayoutAlign="center center" fxFlex="80">
+        <div fxLayout="column" fxLayoutGap="8" fxLayoutAlign="center center" fxFlex="100">
+          <div class="full-width" fxLayout="row" fxLayoutAlign="center center">
+              <img width="100" alt="Your Logo" src="assets/logo.png">
+          </div>
+          <div class="full-width email-label">
+            <p>Please provide the following information:</p>
+          </div>
+          <form class="signup-form">
+            <div class="full-width" fxLayout="row">
+                <mat-form-field class="name-field" fxFlex="50">
+                  <input matInput type="text" name="firstName" placeholder="First Name" [(ngModel)]="firstName" required>
+                </mat-form-field>
+                <div fxFlex="2"></div>
+                <mat-form-field class="name-field" fxFlex="50">
+                  <input matInput type="text" name="lastName" placeholder="Last Name" [(ngModel)]="lastName" required>
+                </mat-form-field>
+            </div>
+            <mat-form-field class="address-field full-width">
+              <input matInput type="text" name="address" placeholder="Street Address" [(ngModel)]="address" required>
+            </mat-form-field>
+            <mat-form-field class="city-field full-width">
+              <input matInput type="text" name="city" placeholder="City" [(ngModel)]="city" required>
+            </mat-form-field>
+            <mat-form-field class="state-field full-width">
+              <input matInput type="text" name="state" placeholder="State / Province / Region" [(ngModel)]="state" required>
+            </mat-form-field>
+            <mat-form-field class="country-field full-width">
+                <mat-label>Country</mat-label>
+                <mat-select [(ngModel)]="selectedCountry" name="country" required>
+                  <mat-option *ngFor="let country of countries" [value]="country.code">
+                    {{country.name}}
+                  </mat-option>
+                </mat-select>
+            </mat-form-field>
+            <mat-form-field class="zip-field full-width">
+              <input matInput type="text" name="zip" placeholder="Zip / Postal Code" [(ngModel)]="zip">
+            </mat-form-field>
+            <mat-form-field class="phone-field full-width">
+              <input matInput type="text" name="phone" placeholder="Phone" [(ngModel)]="phone" required>
+            </mat-form-field>
+          </form>
+          <div class="full-width" fxLayoutAlign="center center" fxFlex="80">
+              <button mat-button color="primary" (click)="createUser()">Submit</button>
+          </div>
+        </div>
+    </div>
+  </mat-card>
+</div>

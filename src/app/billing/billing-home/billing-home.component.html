@@ -1,0 +1,40 @@
+<app-navbar noReturn="true"></app-navbar>
+<!--The content below is only a placeholder and can be replaced.-->
+<div style="text-align:center">
+    <img width="200" alt="Your Logo" src="assets/logo.png">
+</div>
+<div *ngIf="loaded" class="full-height" fxLayout.gt-xs="row" fxLayout.xs="column" fxLayoutAlign.gt-xs="center center" fxLayoutAlign.xs="center space-between" fxLayoutGap.xs="20px" fxLayoutGap.gt-xs="8px">
+  <mat-card class="example-card" fxLayout="column" fxLayoutAlign="center start">
+    <mat-card-header>
+      <div mat-card-avatar class="example-header-image card"></div>
+      <mat-card-title>Payment Methods</mat-card-title>
+      <mat-card-subtitle>Update / Add Credit Card</mat-card-subtitle>
+    </mat-card-header>
+    <img mat-card-image src="assets/cards.png" alt="fancy payment information image">
+    <mat-card-content>
+      <p>
+        {{defaultPaymentMethod? 'Your current credit card ends in ****'+defaultPaymentMethod.CardInfo.Last4:'You need to add a payment method.'}}
+      </p>
+    </mat-card-content>
+    <mat-card-actions>
+      <button mat-button color="primary" (click)="paymentMethodsClicked();">{{defaultPaymentMethod? 'UPDATE':'ADD'}}</button>
+    </mat-card-actions>
+  </mat-card>
+  <mat-card class="example-card" fxLayout="column" fxLayoutAlign="center start">
+    <mat-card-header>
+      <div mat-card-avatar class="example-header-image browser"></div>
+      <mat-card-title>Subscription</mat-card-title>
+      <mat-card-subtitle>Change Your Subscription</mat-card-subtitle>
+    </mat-card-header>
+    <img mat-card-image src="assets/upgrade.png" alt="fancy subscription image">
+    <mat-card-content>
+      <p>
+        {{currentPlanString === ' n/a '? 'Please select a plan':'You are on ' + currentPlanString}}
+      </p>
+    </mat-card-content>
+    <mat-card-actions>
+      <button mat-button color="primary" (click)="modifySubscriptionClicked();">MODIFY SUBSCRIPTION</button>
+    </mat-card-actions>
+  </mat-card>
+</div>
+<!-- <app-footer></app-footer> -->

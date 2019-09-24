@@ -1,0 +1,38 @@
+<app-navbar backText="Home" routeUrl="/billing"></app-navbar>
+<div class="payment-page" fxLayout="row" fxLayoutAlign="center center">
+  <mat-card fxFlex="30">
+    <h2>Payment methods</h2>
+    <h3>Add a new card</h3>
+    <app-credit-card-form (messageEvent)="receiveNewStripeToken($event)"></app-credit-card-form>
+    <div *ngIf="paymentMethods.length">
+        <h3>Saved payment methods</h3>
+        <div class="pm-headers" fxLayout="row" fxLayoutAlign="start center">
+          <p fxFlex="25">Brand</p>
+          <p fxFlex="30">Card Number</p>
+          <p fxFlex="20">Exp</p>
+          <div fxFlex="25" fxLayout="row">
+            <p fxFlex="50">Remove</p>
+            <p fxFlex="50">Default</p>
+          </div>
+        </div>
+        <div class="payment-method" *ngFor="let method of paymentMethods; index as i;" fxLayout="row" fxLayoutAlign="start center">
+          <div fxFlex="25">{{method.CardInfo.Brand}} </div>
+          <div fxFlex="30">**** **** **** {{method.CardInfo.Last4}}</div>
+          <div fxFlex="20">{{method.CardInfo.ExpMonth + '/' + method.CardInfo.ExpYear}}</div>
+          <div class="button-wrapper" fxFlex="25" fxLayout="row">
+              <button fxFlex="50" mat-icon-button class="remove-card" aria-label="icon-button with a trash icon" (click)="deletePaymentMethod(method, i)">
+                  <mat-icon aria-hidden="false" aria-label="Example home icon">delete_forever</mat-icon>
+              </button>
+              <button
+                fxFlex="50"
+                mat-icon-button
+                [ngClass]="{'star': true, 'star-default': method.IsDefault, 'star-general': !method.IsDefault}"
+                aria-label="icon-button with a trash icon"
+                (click)="setAsDefault(method, i)">
+                  <mat-icon aria-hidden="false" aria-label="Example home icon">stars</mat-icon>
+              </button>
+          </div>
+        </div>
+    </div>
+  </mat-card>
+</div>

@@ -3,7 +3,12 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  production: false
+  production: false,
+  routerLimitsApi: 'http://localhost:8080',
+  billingApi: 'http://localhost:8085/api',
+  ApiCred : {"key": "sdfasjdhfkashdfkjsdf"},
+  stripePublicKey: "pk_test_J074hCIP4yUhCfDkjxblrEVv",
+  mockBillingAPI: false
 };
 
 /*
