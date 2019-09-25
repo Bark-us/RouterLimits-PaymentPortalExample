@@ -60,6 +60,12 @@ export class BillingSubscriptionsComponent implements OnInit {
       if (element.Id === this.selectedPlan) {this.selectedPlanName = element.Name; return false; }
     });
     this.api.updateAccount(updateReq).subscribe((ex) => {
+      if (!this.account.Active) {
+        this.account.Active = true;
+        return this.snackBar.open('Account re-activated on ' + this.selectedPlanName, 'Okay', {
+          duration: 5000,
+        });
+      }
 
       this.snackBar.open('Plan updated to ' + this.selectedPlanName, 'Okay', {
         duration: 2000,
