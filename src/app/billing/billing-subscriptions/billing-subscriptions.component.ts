@@ -72,7 +72,23 @@ export class BillingSubscriptionsComponent implements OnInit {
       });
     },
     error => {
-      this.snackBar.open('Error changing plan.', 'Okay', {
+
+      let snackMsg = 'Error changing plan.';
+
+      if (error.status === 409 && error.error && error.error.code) {
+        if (error.error.code === 'NO_PAYMENT_METHOD') {
+          snackMsg = 'You must enter payment information before you can change plans.';
+          this.snackBar.open(snackMsg, 'Okay', {
+            duration: 4000,
+          });
+          return this.router.navigateByUrl('/billing/payment');
+        } else if (error.error.code === 'PAYMENT_FAILED') {
+          snackMsg = 'Your plan was not updated. ' +
+          'We were not able to charge your card. ' +
+          'Make sure your payment information is up to date then try again.';
+        }
+      }
+      this.snackBar.open(snackMsg, 'Okay', {
         duration: 4000,
       });
       console.error(error);
