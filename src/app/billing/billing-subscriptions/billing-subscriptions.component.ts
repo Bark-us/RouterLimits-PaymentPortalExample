@@ -113,6 +113,8 @@ export class BillingSubscriptionsComponent implements OnInit {
     const updateReq = new AccountUpdateRequest({active: true, planId: 'ybpn94jx'});
     this.api.updateAccount(updateReq).subscribe((ex) => {
       this.account.Active = true;
+      this.selectedPlan = this.plans[0].Id;
+      this.selectedPlanName = this.plans[0].Name;
       this.snackBar.open('Account re-activated.', 'Okay', {
         duration: 2000,
       });

@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { RlAPIService } from 'src/app/rl-api.service';
-import { PaymentMethod } from 'src/app/models/billing';
+import { PaymentMethod, AccountUpdateRequest } from 'src/app/models/billing';
 import { BillingService } from '../billing.service';
 import { isNullOrUndefined } from 'util';
 import { finalize } from 'rxjs/operators';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-billing-home',
@@ -20,11 +21,12 @@ export class BillingHomeComponent implements OnInit {
   lastFour: string;
   router: Router;
   defaultPaymentMethod: PaymentMethod;
+  isAccountActive = true;
 
   private defaultPaymentLoaded = false;
   private planLoaded = false;
 
-  constructor(router: Router, private billingApi: RlAPIService, private billingService: BillingService) {
+  constructor(router: Router, private api: RlAPIService, private billingService: BillingService, private snackBar: MatSnackBar) {
     this.loaded = false;
     this.router = router;
     this.title = 'Your App Title Here';
@@ -63,6 +65,7 @@ export class BillingHomeComponent implements OnInit {
       } else {
         this.currentPlanString = ' n/a ';
       }
+      this.isAccountActive = acct.Active;
     },
     err => {
       if (err && err.status && err.status === 401) {
@@ -82,5 +85,26 @@ export class BillingHomeComponent implements OnInit {
 
   modifySubscriptionClicked() {
     this.router.navigateByUrl('/billing/subscriptions');
+  }
+
+  reactivateAccount(): void {
+
+    if (this.isAccountActive) { return; }
+
+    // Subscribes to hard coded essentials plan id
+    const updateReq = new AccountUpdateRequest({active: true, planId: 'ybpn94jx'});
+    this.api.updateAccount(updateReq).subscribe((ex) => {
+
+      this.snackBar.open('Account re-activated.', 'Okay', {
+        duration: 2000,
+      });
+      this.router.navigateByUrl('/billing/subscriptions');
+    },
+    error => {
+      this.snackBar.open('Error: Account could not be re-activated.', 'Okay', {
+        duration: 4000,
+      });
+      console.error(error);
+    });
   }
 }

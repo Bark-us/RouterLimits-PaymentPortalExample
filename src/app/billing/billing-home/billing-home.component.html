@@ -28,12 +28,16 @@
     </mat-card-header>
     <img mat-card-image src="assets/upgrade.png" alt="fancy subscription image">
     <mat-card-content>
-      <p>
+      <p *ngIf="isAccountActive">
         {{currentPlanString === ' n/a '? 'Please select a plan':'You are on ' + currentPlanString}}
       </p>
+      <p *ngIf="!isAccountActive">
+          Activate your account to modify subscriptions.
+        </p>
     </mat-card-content>
     <mat-card-actions>
-      <button mat-button color="primary" (click)="modifySubscriptionClicked();">MODIFY SUBSCRIPTION</button>
+      <button mat-button color="primary" (click)="modifySubscriptionClicked();" *ngIf="isAccountActive">MODIFY SUBSCRIPTION</button>
+      <button mat-button color="error" (click)="reactivateAccount();" *ngIf="!isAccountActive">ACTIVATE ACCOUNT</button>
     </mat-card-actions>
   </mat-card>
 </div>
