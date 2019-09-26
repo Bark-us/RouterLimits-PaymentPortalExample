@@ -8,13 +8,14 @@ import { isNullOrUndefined, isNull } from 'util';
 import { StorageMap } from '@ngx-pwa/local-storage';
 import { AccountCreatedResponse, Account } from './models/account';
 import { UserCreatedResponse } from './models/user';
+import { AuthService } from './authentication/auth/auth.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class RlAPIService {
 
-  constructor(private http: HttpClient, private storageMap: StorageMap) {}
+  constructor(private http: HttpClient, private storageMap: StorageMap, private authService: AuthService) {}
 
   private billingApiKey = '';
   private httpOptions = {
@@ -179,21 +180,19 @@ export class RlAPIService {
       return this.http.get(_baseApiUrl + params.url, params.options);
     }
 
-    return this.storageMap.get('auth').pipe(
-      flatMap((auth: any) => {
-        if (isNullOrUndefined(auth.ApiKey) || isNullOrUndefined(auth.AccountId)) { throw new Error('Not Authorized'); }
 
-        const options = {
-          headers: new HttpHeaders({
-            'Content-Type': 'application/json',
-            'x-api-key': auth.ApiKey,
-            //'Authorization': this.addBasicAuth(auth.ApiKey, '')
-          })
-        };
+    if (isNullOrUndefined(this.authService.auth.ApiKey) || isNullOrUndefined(this.authService.auth.AccountId)) {
+      throw new Error('Not Authorized');
+    }
 
-        return this.http.get(_baseApiUrl + params.url.replace('<<ACCOUNTID>>', auth.AccountId), options);
+    const options = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        'x-api-key': this.authService.auth.ApiKey
       })
-    );
+    };
+
+    return this.http.get(_baseApiUrl + params.url.replace('<<ACCOUNTID>>', this.authService.auth.AccountId), options);
   }
 
   POST(params: {base?: string, url: string, body: any, mockData?: any, options?: any}): Observable<any> {
@@ -217,21 +216,19 @@ export class RlAPIService {
       return this.http.post(_baseApiUrl + params.url, params.body, params.options);
     }
 
-    return this.storageMap.get('auth').pipe(
-      flatMap((data: any) => {
-        if (isNullOrUndefined(data.ApiKey) || isNullOrUndefined(data.AccountId)) { throw new Error('Not Authorized'); }
+    if (isNullOrUndefined(this.authService.auth.ApiKey) || isNullOrUndefined(this.authService.auth.AccountId)) {
+      throw new Error('Not Authorized');
+    }
 
-        const options = {
-          headers: new HttpHeaders({
-            'Content-Type': 'application/json',
-            'x-api-key': data.ApiKey,
-            //'Authorization': this.addBasicAuth(data.ApiKey, '')
-          })
-        };
-        // Make the call to update the subscription
-        return this.http.post(_baseApiUrl + params.url.replace('<<ACCOUNTID>>', data.AccountId), params.body, options);
+    const options = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        'x-api-key': this.authService.auth.ApiKey
       })
-    );
+    };
+
+    // Make the call to update the subscription
+    return this.http.post(_baseApiUrl + params.url.replace('<<ACCOUNTID>>', this.authService.auth.AccountId), params.body, options);
   }
 
   DELETE(params: {url: string, mockData?: any, options?: any }) {
@@ -246,21 +243,18 @@ export class RlAPIService {
       return this.http.delete(environment.billingApi + params.url, params.options);
     }
 
-    return this.storageMap.get('auth').pipe(
-      flatMap((auth: any) => {
-        if (isNullOrUndefined(auth.ApiKey) || isNullOrUndefined(auth.AccountId)) { throw new Error('Not Authorized'); }
+    if (isNullOrUndefined(this.authService.auth.ApiKey) || isNullOrUndefined(this.authService.auth.AccountId)) {
+      throw new Error('Not Authorized');
+    }
 
-        const options = {
-          headers: new HttpHeaders({
-            'Content-Type': 'application/json',
-            'x-api-key': auth.ApiKey,
-            //Authorization: this.addBasicAuth(auth.ApiKey, '')
-          })
-        };
-
-        return this.http.delete(environment.billingApi + params.url.replace('<<ACCOUNTID>>', auth.AccountId), options);
+    const options = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        'x-api-key': this.authService.auth.ApiKey
       })
-    );
+    };
+
+    return this.http.delete(environment.billingApi + params.url.replace('<<ACCOUNTID>>', this.authService.auth.AccountId), options);
   }
 
   addBasicAuth(username, password) {
