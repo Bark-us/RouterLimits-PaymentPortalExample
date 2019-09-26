@@ -77,6 +77,8 @@ export class CreditCardFormComponent implements OnInit {
             this.card.clear();
             this.stripeTest.reset();
           } else if (result.error) {
+            // This is a hacky way to standardize stripe's server message with stripe's credit card form
+            if (result.error.message === 'Your postal code is incomplete.') {result.error.message = 'Your zip code is incomplete.'; }
             return this.openSnackBar(result.error.message, 'Okay', 10000);
             // Error creating the token
             console.log(result.error.message);
