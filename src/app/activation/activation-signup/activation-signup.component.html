@@ -1,6 +1,6 @@
 <div class="full-height activation-signup" fxLayout="row" fxLayoutAlign="center center" fxFlex="100">
-    <mat-card fxFlex="50" fxLayoutAlign="center center">
-      <div fxLayout="row" fxLayoutAlign="center center" fxFlex="80">
+    <mat-card fxFlex.gt-md="50" fxFlex.xs="100" fxFlex.sm="80" fxFlex.md="70" fxLayoutAlign="center center">
+      <div fxLayout="row" fxLayoutAlign="center center" fxFlex.gt-xs="80" fxFlex.xs="95">
         <div fxLayout="column" fxLayoutGap="8" fxLayoutAlign="center center" fxFlex="100">
           <div class="full-width" fxLayout="row" fxLayoutAlign="center center">
               <img width="100" alt="Your Logo" src="assets/logo.png">
@@ -9,12 +9,12 @@
             <p>Please provide the following information:</p>
           </div>
           <form class="signup-form">
-            <div class="full-width" fxLayout="row">
-                <mat-form-field class="name-field" fxFlex="50">
+            <div class="full-width" fxLayout.gt-xs="row" fxLayout.xs="column">
+                <mat-form-field class="name-field" fxFlex.gt-xs="50" fxFlex.xs="100">
                   <input matInput type="text" name="firstName" placeholder="First Name" [(ngModel)]="firstName" required>
                 </mat-form-field>
                 <div fxFlex="2"></div>
-                <mat-form-field class="name-field" fxFlex="50">
+                <mat-form-field class="name-field" fxFlex.gt-xs="50" fxFlex.xs="100">
                   <input matInput type="text" name="lastName" placeholder="Last Name" [(ngModel)]="lastName" required>
                 </mat-form-field>
             </div>
