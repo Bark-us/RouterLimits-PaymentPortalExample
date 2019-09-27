@@ -1,6 +1,6 @@
 <app-navbar backText="Home" routeUrl="/billing"></app-navbar>
 <div class="payment-page" fxLayout="row" fxLayoutAlign="center center">
-  <mat-card fxFlex="30">
+  <mat-card fxFlex.gt-md="30" fxFlex.xs="95" fxFlex.sm="80" fxFlex.md="50">
     <h2>Payment methods</h2>
     <h3>Add a new card</h3>
     <app-credit-card-form (messageEvent)="receiveNewStripeToken($event)"></app-credit-card-form>
@@ -24,6 +24,7 @@
                   <mat-icon aria-hidden="false" aria-label="Example home icon">delete_forever</mat-icon>
               </button>
               <button
+                [hidden]="method.IsDefault"
                 fxFlex="50"
                 mat-icon-button
                 [ngClass]="{'star': true, 'star-default': method.IsDefault, 'star-general': !method.IsDefault}"

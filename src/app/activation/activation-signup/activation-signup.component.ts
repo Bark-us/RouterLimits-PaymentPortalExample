@@ -15,6 +15,7 @@ import { environment } from '../../../environments/environment';
 import { AccountCreatedResponse } from 'src/app/models/account';
 import { BillingAuthResponse } from 'src/app/models/billing';
 import { StorageMap } from '@ngx-pwa/local-storage';
+import { AuthService } from 'src/app/authentication/auth/auth.service';
 
 
 @Component({
@@ -40,7 +41,13 @@ export class ActivationSignupComponent implements OnInit {
   phone: string;
   countries = [];
 
-  constructor(router: Router, activate: ActivateService, rlAPI: RlAPIService, private snackBar: MatSnackBar, private storageMap: StorageMap) {
+  constructor(
+    router: Router,
+    activate: ActivateService,
+    rlAPI: RlAPIService,
+    private snackBar: MatSnackBar,
+    private storageMap: StorageMap,
+    private authService: AuthService) {
     this.router = router;
     this.activate = activate;
     this.rlAPI = rlAPI;
@@ -81,11 +88,8 @@ export class ActivationSignupComponent implements OnInit {
       return this.activate.createAccount(data.UserId);
     })
     .then((data: AccountCreatedResponse) => {
-      this.storageMap.delete('auth').subscribe(() => {
-          this.storageMap.set('auth', new BillingAuthResponse(data.ApiKey, data.Account.Id)).subscribe(() => {
-             return this.activate.updateAccount(true, "ybpn94jx");
-          });
-        });
+      this.authService.auth = new BillingAuthResponse(data.ApiKey, data.Account.Id);
+      return this.activate.updateAccount(true, "ybpn94jx");
     })
     .then( (data: any) => {
       this.router.navigateByUrl('activate/done');
