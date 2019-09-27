@@ -2,6 +2,7 @@ import { Component, OnInit, ViewChild, Output, EventEmitter } from '@angular/cor
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { StripeService, Elements, Element as StripeElement, ElementsOptions, Token } from 'ngx-stripe';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { finalize } from 'rxjs/operators';
 
 
 @Component({
@@ -14,6 +15,8 @@ export class CreditCardFormComponent implements OnInit {
   elements: Elements;
   card: StripeElement;
   stripeTest: FormGroup;
+  isCreatingCard = false;
+
   // optional parameters
   elementsOptions: ElementsOptions = {
     locale: 'en'
@@ -66,8 +69,10 @@ export class CreditCardFormComponent implements OnInit {
       const name = this.stripeTest.get('name').value;
       if (!name) { return this.openSnackBar('Name is required.', 'Okay'); }
 
+      this.isCreatingCard = true;
       this.stripeService
         .createToken(this.card, { name })
+        .pipe(finalize(() => {this.isCreatingCard = false; }))
         .subscribe(result => {
           if (result.token) {
             // Use the token to create a charge or a customer
@@ -77,9 +82,9 @@ export class CreditCardFormComponent implements OnInit {
             this.card.clear();
             this.stripeTest.reset();
           } else if (result.error) {
+            // This is a hacky way to standardize stripe's server message with stripe's credit card form
+            if (result.error.message === 'Your postal code is incomplete.') {result.error.message = 'Your zip code is incomplete.'; }
             return this.openSnackBar(result.error.message, 'Okay', 10000);
-            // Error creating the token
-            console.log(result.error.message);
           }
         });
     }

@@ -67,10 +67,10 @@ export class ActivationSignupComponent implements OnInit {
     // Do some simple form validation.
     if (!this.firstName) { this.openSnackBar('First Name is required.', 'Okay'); return;  }
     if (!this.lastName) { this.openSnackBar('Last Name is required.', 'Okay'); return;  }
-    if (!this.phone) { this.openSnackBar('Phone number is required.', 'Okay'); return;  }
     if (!this.address) { this.openSnackBar('Street Address is required.', 'Okay'); return; }
-    if (!this.city) { this.openSnackBar('City is required.', 'Okay'); return; }
+    if (!this.city || this.city.length < 2) { this.openSnackBar('City is required and must be at least two characters.', 'Okay'); return; }
     if (!this.state) { this.openSnackBar('State is required.', 'Okay'); return; }
+    if (!this.phone) { this.openSnackBar('Phone number is required.', 'Okay'); return;  }
 
     const user = new User(
       this.firstName, this.lastName, this.activate.getEmail(),

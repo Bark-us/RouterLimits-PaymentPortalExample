@@ -1,6 +1,7 @@
 <app-navbar backText="Home" routeUrl="/billing"></app-navbar>
 <div fxLayout="row" fxLayoutAlign="center center" *ngIf="loaded">
     <mat-card
+      *ngIf="account.Active"
       class="example-card" fxLayout="column"
       fxLayoutAlign="center start"
       fxFlex.gt-md="100" fxFlex.sm-md="80"
@@ -8,7 +9,7 @@
       <mat-card-header>
         <div mat-card-avatar class="example-header-image browser"></div>
         <mat-card-title>Choose your new subscription</mat-card-title>
-        <mat-card-subtitle>You are currently subscribed to {{selectedPlanName}}</mat-card-subtitle>
+        <mat-card-subtitle [hidden]="selectedPlanName">You are currently subscribed to {{selectedPlanName}}</mat-card-subtitle>
       </mat-card-header>
       <mat-card-content fxLayout="row" fxLayoutAlign="center center">
           <div class="full-width">
@@ -31,9 +32,9 @@
 </div>
 <div fxLayout="row" fxLayoutAlign="center center" *ngIf="account">
   <div fxFlex.gt-md="100" fxFlex.sm-md="80" fxFlex.md="50" fxFlex.gt-md="25" class="cancel-btn" fxLayout="row" fxLayoutAlign="center start" fxFlexFill *ngIf="account.Active">
-    <button mat-raised-button color="warn" class="full-width" (click)="cancelAccount()">Cancel account</button>
+    <button mat-button color="warn" class="full-width" (click)="cancelAccount()">Cancel account</button>
   </div>
   <div fxFlex.gt-md="100" fxFlex.sm-md="80" fxFlex.md="50" fxFlex.gt-md="25" class="cancel-btn" fxLayout="row" fxLayoutAlign="center start" fxFlexFill *ngIf="!account.Active">
-      <button mat-raised-button color="#2fac3e" class="full-width" (click)="reactivateAccount()">Re-activate account</button>
-    </div>
+    <button mat-raised-button color="primary" class="full-width" (click)="reactivateAccount()">Re-activate account</button>
+  </div>
 </div>
