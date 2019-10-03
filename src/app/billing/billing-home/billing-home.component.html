@@ -1,5 +1,5 @@
 <app-navbar noReturn="true"></app-navbar>
-<div *ngIf="loaded" class="full-height" style="margin-top: 20px;" fxLayout.gt-xs="row" fxLayout.xs="column" fxLayoutAlign.gt-xs="center center" fxLayoutAlign.xs="center space-between" fxLayoutGap.xs="20px" fxLayoutGap.gt-xs="8px">
+<div *ngIf="loaded" class="full-height top-buffer" fxLayout.gt-xs="row" fxLayout.xs="column" fxLayoutAlign.gt-xs="center center" fxLayoutAlign.xs="center space-between" fxLayoutGap.xs="20px" fxLayoutGap.gt-xs="8px">
   <mat-card class="example-card" fxLayout="column" fxLayoutAlign="center start">
     <mat-card-header>
       <div mat-card-avatar class="example-header-image card"></div>
@@ -9,7 +9,7 @@
     <img mat-card-image src="assets/cards.png" alt="fancy payment information image">
     <mat-card-content>
       <p>
-        {{defaultPaymentMethod? 'Your current credit card ends in ****'+defaultPaymentMethod.CardInfo.Last4:'You need to add a payment method.'}}
+        {{defaultPaymentMethod? 'Your current credit card ends in ****'+defaultPaymentMethod.CardInfo.Last4:'No payment methods'}}
       </p>
     </mat-card-content>
     <mat-card-actions>

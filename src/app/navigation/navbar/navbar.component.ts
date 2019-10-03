@@ -19,4 +19,9 @@ export class NavbarComponent implements OnInit {
   navArrowClicked() {
     this.router.navigateByUrl(this.routeUrl);
   }
+
+  close() {
+    self.close();
+    self.close();
+  }
 }

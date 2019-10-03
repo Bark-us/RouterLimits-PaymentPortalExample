@@ -99,11 +99,11 @@ export class BillingSubscriptionsComponent implements OnInit {
 
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
       width: '250px',
-      data: {title: 'Cancel Account', message: 'Are you sure you would like to cancel your account?', affirmText: 'Okay', denyText: 'No'}
+      data: {title: 'Cancel Account', message: 'Are you sure you would like to cancel your account?', affirmText: 'No', denyText: 'Okay'}
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      if (!result) {
+      if (result) {
         return;
       }
 
@@ -113,6 +113,7 @@ export class BillingSubscriptionsComponent implements OnInit {
         this.snackBar.open('Account cancelled.', 'Okay', {
           duration: 2000,
         });
+        return this.router.navigateByUrl('billing');
       },
       error => {
         this.snackBar.open('Error: Account not cancelled.', 'Okay', {
@@ -141,5 +142,9 @@ export class BillingSubscriptionsComponent implements OnInit {
       });
       console.error(error);
     });
+  }
+
+  returnHome(): void {
+    this.router.navigateByUrl('billing');
   }
 }

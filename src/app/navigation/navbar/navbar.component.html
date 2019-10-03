@@ -1,6 +1,16 @@
 <div class="full-width" fxLayout="column">
   <div class="full-width nav-bar-header" fxLayout="row" fxLayoutAlign="start center">
-      <img width="150" alt="Your Logo" src="assets/nav-logo.png">
+      <div fxFlex="80" layout="row" fxLayoutAlign="start center">
+        <img width="150px" alt="Your Logo" src="assets/nav-logo.png">
+      </div>
+      <div fxFlex="20" layout="row" fxLayoutAlign="end center">
+        <button
+          mat-icon-button
+          aria-label="icon-button navigate close icon"
+          (click)="close()">
+          <mat-icon aria-hidden="false" aria-label="Example close icon">close</mat-icon>
+        </button>
+      </div>
   </div>
   <div class="full-width" *ngIf="!noReturn">
       <button
