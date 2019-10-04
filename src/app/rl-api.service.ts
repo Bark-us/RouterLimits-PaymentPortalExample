@@ -55,7 +55,7 @@ export class RlAPIService {
       account: new Account({
         id: 'vw63n2wz',
         active: true,
-        plan: new Plan({ id: 'vw63n2wx', name: 'Not so cool plan' })
+        plan: new Plan({ id: 'vw63n2wx', name: 'Not so cool plan', unavailable: false })
       })
     });
 
@@ -116,8 +116,8 @@ export class RlAPIService {
   getAvailablePlans(startKey: string): Observable<PaginatedPlan> {
 
     const resp: Plan[] = [
-      new Plan ({ id: 'ap77n2wz', name: 'Super Cool Plan'}),
-      new Plan ({id: 'vw63n2wx', name: 'Not so cool plan'})
+      new Plan ({ id: 'ap77n2wz', name: 'Super Cool Plan', unavailable: false}),
+      new Plan ({id: 'vw63n2wx', name: 'Not so cool plan', unavailable: false})
     ];
 
     return this.GET({

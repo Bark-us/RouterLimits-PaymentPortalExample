@@ -9,6 +9,7 @@ import { BillingService } from '../billing.service';
 import { Router } from '@angular/router';
 import { Observable, forkJoin } from 'rxjs';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { isNullOrUndefined } from 'util';
 
 @Component({
   selector: 'app-billing-subscriptions',
@@ -34,8 +35,20 @@ export class BillingSubscriptionsComponent implements OnInit {
     const one = this.billingService.GetAvailablePlansAsync(null);
     const two = this.billingService.GetAccountAsync();
     forkJoin(one, two).subscribe(results => {
-      this.plans = results[0];
+      this.plans = [];
       const acct = results[1];
+
+      results[0].forEach(p => {
+        if (isNullOrUndefined(p.Unavailable) || p.Unavailable === false) {
+          this.plans.push(p);
+        }
+      });
+
+      if (!this.plans || !this.plans.length) {
+        this.snackBar.open('Error 5966: No available plans found', 'Okay', {duration: 30000 });
+        return this.router.navigateByUrl('error');
+      }
+
       // TODO: Add error handling in case of no account
       if (acct && acct.Plan && acct.Plan.Name) {
         this.selectedPlan = acct.Plan.Id;

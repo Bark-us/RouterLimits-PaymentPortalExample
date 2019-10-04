@@ -89,10 +89,7 @@ export class ActivationSignupComponent implements OnInit {
     })
     .then((data: AccountCreatedResponse) => {
       this.authService.auth = new BillingAuthResponse(data.ApiKey, data.Account.Id);
-      return this.activate.updateAccount(true, "ybpn94jx");
-    })
-    .then((data: any) => {
-      this.router.navigateByUrl('activate/done');
+      return this.router.navigateByUrl('activate/subscriptions');
     })
     .catch((err) => {
       if (err.error && err.error.message) {
