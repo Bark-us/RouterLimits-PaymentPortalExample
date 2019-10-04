@@ -1,0 +1,40 @@
+<div class="activation-subscriptions full-width top-buffer" fxLayout="row" fxLayoutAlign="center center">
+  <div style="height: 90vh" fxLayout="row" fxLayoutAlign="center center" *ngIf="!loaded">
+    <mat-progress-spinner
+      color="primary"
+      diameter="50"
+      mode="indeterminate">
+    </mat-progress-spinner>
+  </div>
+  <mat-card fxFlex="40" fxFlex.gt-md="30" fxFlex.xs="95" fxFlex.sm="80" fxFlex.md="50" *ngIf="loaded">
+      <div class="full-width" fxLayout="row" fxLayoutAlign="center center">
+          <img width="100" alt="Your Logo" src="assets/logo.png">
+      </div>
+      <mat-card-content fxFlexFill fxLayout="column" fxLayoutAlign="center center">
+        <div class="numbered-list">
+          <div class="number-one" [ngClass]="{'selected': page == 0}">{{page == 0? '1. Select a subscription':selectedPlan.Name + ' selected'}}</div>
+          <div class="number-two" [ngClass]="{'selected': page == 1}">2. Add payment information</div>
+        </div>
+        <div class="content full-width" fxLayout="row" fxLayoutAlign="center center" fxFlexFill>
+          <div class="plan-selection" *ngIf="page == 0">
+            <mat-form-field fxLayoutAlign="center center">
+              <mat-select name="planSelector" [(ngModel)]="selectedPlan">
+                <mat-option *ngFor="let plan of plans" [value]="plan">
+                  {{plan.Name}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+            <div class="card-button-wrapper" fxLayout="row" fxLayoutAlign="center center" fxFlexFill>
+                <button mat-button color="primary" class="full-width" (click)="selectPlan()">Select</button>
+            </div>
+          </div>
+          <div class="full-width" fxLayout="column" fxLayoutAlign="center center" *ngIf="page == 1">
+            <app-credit-card-form class="cc-form-width" (messageEvent)="receiveNewStripeToken($event)" *ngIf="page == 1"></app-credit-card-form>
+            <div class="cc-form-width" fxLayout="row" fxLayoutAlign="start center">
+              <button mat-button color="default" class="subscription-back-btn" (click)="backToPlans()">Choose a different plan</button>
+            </div>
+          </div>
+        </div>
+      </mat-card-content>
+  </mat-card>
+</div>

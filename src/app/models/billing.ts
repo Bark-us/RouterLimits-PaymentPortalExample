@@ -50,16 +50,19 @@ export class BillingAuthResponse {
 export interface PlanJSON {
   id: string;
   name: string;
+  unavailable: boolean;
 }
 
 export class Plan {
-  constructor({ id, name }: {id?: string, name?: string} = {}) {
+  constructor({ id, name, unavailable }: {id?: string, name?: string, unavailable?: boolean} = {}) {
     this.Id = id;
     this.Name = name;
+    this.Unavailable = unavailable;
   }
 
   Id: string;
   Name: string;
+  Unavailable: boolean;
 
   static fromJSON(json: PlanJSON): Plan {
     if (!json) {
@@ -68,7 +71,8 @@ export class Plan {
     const plan = Object.create(Plan.prototype);
     return Object.assign(plan, {
       Id: json.id,
-      Name: json.name
+      Name: json.name,
+      Unavailable: json.unavailable
     });
   }
 
@@ -79,7 +83,8 @@ export class Plan {
   toJSON(): PlanJSON {
     return Object.assign({}, {
       id: this.Id.toString(),
-      name: this.Name.toString()
+      name: this.Name.toString(),
+      unavailable: this.Unavailable
     });
   }
 }

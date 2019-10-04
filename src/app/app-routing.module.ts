@@ -11,6 +11,7 @@ import { AuthGuardService as AuthGuard } from './authentication/auth-guard/auth-
 import { AuthenticationComponent } from './authentication/authentication.component';
 import { BillingComponent } from './billing/billing.component';
 import { ErrorComponent } from './error/error.component';
+import { ActivationSubscriptionsComponent } from './activation/activation-subscriptions/activation-subscriptions.component';
 
 
 const routes: Routes = [
@@ -35,6 +36,7 @@ const routes: Routes = [
       {path: '', redirectTo: 'email', pathMatch: 'full'},
       {path: 'email', component: ActivationEmailComponent},
       {path: 'signup', component: ActivationSignupComponent},
+      {path: 'subscriptions', component: ActivationSubscriptionsComponent},
       {path: 'done', component: ActivationMessageComponent},
       {path: '**', component: ActivationEmailComponent},
     ]

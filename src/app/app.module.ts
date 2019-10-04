@@ -27,6 +27,7 @@ import { NavbarComponent } from './navigation/navbar/navbar.component';
 import { ConfirmDialogComponent } from './dialogs/confirm/confirm-dialog.component';
 import { ErrorComponent } from './error/error.component';
 import { FooterComponent } from './navigation/footer/footer.component';
+import { ActivationSubscriptionsComponent } from './activation/activation-subscriptions/activation-subscriptions.component';
 
 @NgModule({
   declarations: [
@@ -44,7 +45,8 @@ import { FooterComponent } from './navigation/footer/footer.component';
     CreditCardFormComponent,
     NavbarComponent,
     ErrorComponent,
-    FooterComponent
+    FooterComponent,
+    ActivationSubscriptionsComponent
   ],
   imports: [
     NgxStripeModule.forRoot(environment.stripePublicKey),
