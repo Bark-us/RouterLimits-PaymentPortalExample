@@ -1,11 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { RlAPIService } from 'src/app/rl-api.service';
-import { PaymentMethod, AccountUpdateRequest } from 'src/app/models/billing';
+import { PaymentMethod } from 'src/app/models/billing';
 import { BillingService } from '../billing.service';
-import { isNullOrUndefined } from 'util';
-import { finalize } from 'rxjs/operators';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { forkJoin } from 'rxjs';
+import { LoggerService } from 'src/app/logger.service';
 
 @Component({
   selector: 'app-billing-home',
@@ -22,11 +21,9 @@ export class BillingHomeComponent implements OnInit {
   router: Router;
   defaultPaymentMethod: PaymentMethod;
   isAccountActive = true;
+  NO_PLAN_STRING = ' n/a ';
 
-  private defaultPaymentLoaded = false;
-  private planLoaded = false;
-
-  constructor(router: Router, private api: RlAPIService, private billingService: BillingService, private snackBar: MatSnackBar) {
+  constructor(router: Router, private api: RlAPIService, private billingService: BillingService, private logger: LoggerService) {
     this.loaded = false;
     this.router = router;
     this.title = 'Your App Title Here';
@@ -37,46 +34,37 @@ export class BillingHomeComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.billingService.GetDefaultPaymentMethodAsync().pipe(
-      finalize(() => {
-        this.defaultPaymentLoaded = true;
-        this.checkLoaded();
-    }))
-    .subscribe((pmnt) => {
-      this.defaultPaymentMethod = pmnt;
-    },
-    // Catch
-    (err) => {
-      if (err && err.status && err.status === 401) {
-        return this.router.navigateByUrl('error');
-      }
-      this.defaultPaymentMethod = null;
-    });
+    const one = this.billingService.GetDefaultPaymentMethodAsync();
+    const two = this.billingService.GetAccountAsync();
+    forkJoin(one, two).subscribe(results => {
+      this.defaultPaymentMethod = results[0];
+      const acct = results[1];
 
-    this.billingService.GetAccountAsync()
-    .pipe(
-      finalize(() => {
-        this.planLoaded = true;
-        this.checkLoaded();
-    }))
-    .subscribe(acct => {
       if (acct && acct.Plan && acct.Plan.Name) {
         this.currentPlanString = acct.Plan.Name;
       } else {
-        this.currentPlanString = ' n/a ';
+        this.currentPlanString = this.NO_PLAN_STRING;
       }
+
       this.isAccountActive = acct.Active;
+
+      if (!this.defaultPaymentMethod) {
+        this.logger.Caution('Account Activation Incomplete: \nYou must have a valid payment method to continue.', 'Okay', 10000);
+        return this.router.navigateByUrl('/billing/payment');
+      } else if (!this.currentPlanString || this.currentPlanString === this.NO_PLAN_STRING || !this.isAccountActive) {
+        this.logger.Caution('Account Activation Incomplete: \nSelect a plan to activate your account.', 'Okay', 10000);
+        return this.router.navigateByUrl('/billing/subscriptions');
+      }
+
+      this.loaded = true;
     },
     err => {
+      console.error(err);
       if (err && err.status && err.status === 401) {
         return this.router.navigateByUrl('error');
       }
-      this.currentPlanString = ' n/a ';
+      this.currentPlanString = this.NO_PLAN_STRING;
     });
-  }
-
-  checkLoaded() {
-    this.loaded = (this.planLoaded && this.defaultPaymentLoaded);
   }
 
   paymentMethodsClicked() {
@@ -85,26 +73,5 @@ export class BillingHomeComponent implements OnInit {
 
   modifySubscriptionClicked() {
     this.router.navigateByUrl('/billing/subscriptions');
-  }
-
-  reactivateAccount(): void {
-
-    if (this.isAccountActive) { return; }
-
-    // Subscribes to hard coded essentials plan id
-    const updateReq = new AccountUpdateRequest({active: true, planId: 'ybpn94jx'});
-    this.api.updateAccount(updateReq).subscribe((ex) => {
-
-      this.snackBar.open('Account re-activated.', 'Okay', {
-        duration: 2000,
-      });
-      this.router.navigateByUrl('/billing/subscriptions');
-    },
-    error => {
-      this.snackBar.open('Error: Account could not be re-activated.', 'Okay', {
-        duration: 4000,
-      });
-      console.error(error);
-    });
   }
 }

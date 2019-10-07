@@ -87,7 +87,7 @@ export class RlAPIService {
 
   createUser(user: any): Observable<UserCreatedResponse> {
     // No authentication required; send options
-    return this.POST({base: environment.routerLimitsApi, url: '/users', body: user, options: this.httpOptions})
+    return this.POST({base: environment.billingApi, url: '/proxy/users', body: user, options: this.httpOptions})
     .pipe(map(x =>
       UserCreatedResponse.fromJSON(x)));
   }
