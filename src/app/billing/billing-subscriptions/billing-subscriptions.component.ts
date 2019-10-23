@@ -7,9 +7,9 @@ import { MatDialog, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { ConfirmDialogComponent } from 'src/app/dialogs/confirm/confirm-dialog.component';
 import { BillingService } from '../billing.service';
 import { Router } from '@angular/router';
-import { Observable, forkJoin } from 'rxjs';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { forkJoin } from 'rxjs';
 import { isNullOrUndefined } from 'util';
+import { LoggerService } from 'src/app/logger.service';
 
 @Component({
   selector: 'app-billing-subscriptions',
@@ -23,7 +23,7 @@ export class BillingSubscriptionsComponent implements OnInit {
     private api: RlAPIService,
     private billingService: BillingService,
     public dialog: MatDialog,
-    private snackBar: MatSnackBar) { }
+    private logger: LoggerService) { }
 
   selectedPlan: string;
   selectedPlanName: string;
@@ -45,7 +45,7 @@ export class BillingSubscriptionsComponent implements OnInit {
       });
 
       if (!this.plans || !this.plans.length) {
-        this.snackBar.open('Error 5966: No available plans found', 'Okay', {duration: 30000 });
+        this.logger.Error('Error 5966: No available plans found', 'Okay', 30000);
         return this.router.navigateByUrl('error');
       }
 
@@ -75,14 +75,10 @@ export class BillingSubscriptionsComponent implements OnInit {
     this.api.updateAccount(updateReq).subscribe((ex) => {
       if (!this.account.Active) {
         this.account.Active = true;
-        return this.snackBar.open('Account re-activated on ' + this.selectedPlanName, 'Okay', {
-          duration: 5000,
-        });
+        return this.logger.Success('Account activated on ' + this.selectedPlanName, 'Okay', 5000);
       }
 
-      this.snackBar.open('Plan updated to ' + this.selectedPlanName, 'Okay', {
-        duration: 2000,
-      });
+      this.logger.Success('Plan updated to ' + this.selectedPlanName, 'Okay', 2000);
     },
     error => {
 
@@ -91,9 +87,7 @@ export class BillingSubscriptionsComponent implements OnInit {
       if (error.status === 409 && error.error && error.error.code) {
         if (error.error.code === 'NO_PAYMENT_METHOD') {
           snackMsg = 'You must enter payment information before you can change plans.';
-          this.snackBar.open(snackMsg, 'Okay', {
-            duration: 4000,
-          });
+          this.logger.Error(snackMsg, 'Okay', 4000);
           return this.router.navigateByUrl('/billing/payment');
         } else if (error.error.code === 'PAYMENT_FAILED') {
           snackMsg = 'Your plan was not updated. ' +
@@ -101,9 +95,7 @@ export class BillingSubscriptionsComponent implements OnInit {
           'Make sure your payment information is up to date then try again.';
         }
       }
-      this.snackBar.open(snackMsg, 'Okay', {
-        duration: 4000,
-      });
+      this.logger.Error(snackMsg, 'Okay', 4000);
       console.error(error);
     });
   }
@@ -123,15 +115,10 @@ export class BillingSubscriptionsComponent implements OnInit {
       const updateReq = new AccountUpdateRequest({active: false});
       this.api.updateAccount(updateReq).subscribe((ex) => {
         this.account.Active = false;
-        this.snackBar.open('Account cancelled.', 'Okay', {
-          duration: 2000,
-        });
-        return this.router.navigateByUrl('billing');
+        this.logger.Success('Account cancelled.', 'Okay', 2000);
       },
       error => {
-        this.snackBar.open('Error: Account not cancelled.', 'Okay', {
-          duration: 4000,
-        });
+        this.logger.Error('Error: Account not cancelled.', 'Okay', 4000);
         console.error(error);
       });
     });
@@ -145,14 +132,10 @@ export class BillingSubscriptionsComponent implements OnInit {
       this.account.Active = true;
       this.selectedPlan = this.plans[0].Id;
       this.selectedPlanName = this.plans[0].Name;
-      this.snackBar.open('Account re-activated.', 'Okay', {
-        duration: 2000,
-      });
+      this.logger.Success('Account activated.', 'Okay', 2000);
     },
     error => {
-      this.snackBar.open('Error: Account could not be re-activated.', 'Okay', {
-        duration: 4000,
-      });
+      this.logger.Error('Error: Account could not be activated.', 'Okay', 4000);
       console.error(error);
     });
   }

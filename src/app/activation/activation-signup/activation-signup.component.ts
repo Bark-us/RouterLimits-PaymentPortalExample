@@ -7,7 +7,6 @@ import { CustomErrorStateMatcher } from '../activation.component';
 import { constructor } from 'q';
 import { RlAPIService } from 'src/app/rl-api.service';
 import { User, UserCreatedResponse, UserCreatedResponseJSON } from '../../models/user';
-import {MatSnackBar} from '@angular/material/snack-bar';
 
 declare var require: any;
 
@@ -16,6 +15,7 @@ import { AccountCreatedResponse } from 'src/app/models/account';
 import { BillingAuthResponse } from 'src/app/models/billing';
 import { StorageMap } from '@ngx-pwa/local-storage';
 import { AuthService } from 'src/app/authentication/auth/auth.service';
+import { LoggerService } from 'src/app/logger.service';
 
 
 @Component({
@@ -45,7 +45,7 @@ export class ActivationSignupComponent implements OnInit {
     router: Router,
     activate: ActivateService,
     rlAPI: RlAPIService,
-    private snackBar: MatSnackBar,
+    private logger: LoggerService,
     private storageMap: StorageMap,
     private authService: AuthService) {
     this.router = router;
@@ -99,8 +99,6 @@ export class ActivationSignupComponent implements OnInit {
   }
 
   openSnackBar(message: string, action: string, delay: number = 2000) {
-    this.snackBar.open(message, action, {
-      duration: delay,
-    });
+    this.logger.Error(message, action, delay);
   }
 }

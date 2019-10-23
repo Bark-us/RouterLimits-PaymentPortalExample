@@ -3,14 +3,12 @@ import { Router } from '@angular/router';
 import { ActivateService } from '../activate/activate.service';
 import { Account } from 'src/app/models/account';
 import { RlAPIService } from '../../rl-api.service';
-import { MatSnackBar } from '@angular/material/snack-bar';
-import { StorageMap } from '@ngx-pwa/local-storage';
-import { AuthService } from '../../authentication/auth/auth.service';
 import { Plan } from '../../models/billing';
 import { Token } from 'ngx-stripe';
 import { BillingService } from '../../billing/billing.service';
 import { forkJoin } from 'rxjs';
 import { isNullOrUndefined } from 'util';
+import { LoggerService } from 'src/app/logger.service';
 
 export enum ActivationSubPage {
   SelectAPlan,
@@ -35,7 +33,7 @@ export class ActivationSubscriptionsComponent implements OnInit {
     private activate: ActivateService,
     private billingService: BillingService,
     private api: RlAPIService,
-    private snackBar: MatSnackBar) { }
+    private logger: LoggerService) { }
 
   ngOnInit() {
     const one = this.billingService.GetAvailablePlansAsync(null);
@@ -51,7 +49,7 @@ export class ActivationSubscriptionsComponent implements OnInit {
       });
 
       if (!this.plans || !this.plans.length) {
-        this.openSnackBar('Error 5965: No available plans found', 'Okay', 30000);
+        this.logger.Error('Error 5965: No available plans found', 'Okay', 30000);
         return this.router.navigateByUrl('error');
       }
 
@@ -64,7 +62,7 @@ export class ActivationSubscriptionsComponent implements OnInit {
     err => {
       console.error(err);
       if (err && err.message) {
-        this.openSnackBar(err.message, 'Okay', 30000);
+        this.logger.Error(err.message, 'Okay', 30000);
       }
       return this.router.navigateByUrl('error');
     });
@@ -85,13 +83,13 @@ export class ActivationSubscriptionsComponent implements OnInit {
         .catch((err) => {
           if (err.error && err.error.message) {
             this.loaded = true;
-            return this.openSnackBar(err.error.message, 'Okay', 10000);
+            return this.logger.Error(err.error.message, 'Okay', 10000);
           }
         });
       },
       err => {
         this.loaded = true;
-        return this.openSnackBar(err.error.message, 'Okay', 10000);
+        return this.logger.Error(err.error.message, 'Okay', 10000);
       }
     );
   }
@@ -102,11 +100,5 @@ export class ActivationSubscriptionsComponent implements OnInit {
 
   backToPlans() {
     this.page = ActivationSubPage.SelectAPlan;
-  }
-
-  openSnackBar(message: string, action: string, delay: number = 2000) {
-    this.snackBar.open(message, action, {
-      duration: delay,
-    });
   }
 }

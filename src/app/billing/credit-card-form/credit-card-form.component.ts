@@ -1,8 +1,8 @@
 import { Component, OnInit, ViewChild, Output, EventEmitter } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { StripeService, Elements, Element as StripeElement, ElementsOptions, Token } from 'ngx-stripe';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { finalize } from 'rxjs/operators';
+import { LoggerService } from 'src/app/logger.service';
 
 
 @Component({
@@ -27,7 +27,7 @@ export class CreditCardFormComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private stripeService: StripeService,
-    private snackBar: MatSnackBar) {}
+    private logger: LoggerService) {}
 
     ngOnInit() {
       this.stripeTest = this.fb.group({
@@ -67,7 +67,7 @@ export class CreditCardFormComponent implements OnInit {
     enterCard() {
 
       const name = this.stripeTest.get('name').value;
-      if (!name) { return this.openSnackBar('Name is required.', 'Okay'); }
+      if (!name) { return this.logger.Error('Name is required.', 'Okay', 2000); }
 
       this.isCreatingCard = true;
       this.stripeService
@@ -84,14 +84,8 @@ export class CreditCardFormComponent implements OnInit {
           } else if (result.error) {
             // This is a hacky way to standardize stripe's server message with stripe's credit card form
             if (result.error.message === 'Your postal code is incomplete.') {result.error.message = 'Your zip code is incomplete.'; }
-            return this.openSnackBar(result.error.message, 'Okay', 10000);
+            return this.logger.Error(result.error.message, 'Okay', 10000);
           }
         });
-    }
-
-    openSnackBar(message: string, action: string, delay: number = 2000) {
-      this.snackBar.open(message, action, {
-        duration: delay,
-      });
     }
 }

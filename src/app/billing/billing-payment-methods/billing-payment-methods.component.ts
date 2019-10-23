@@ -3,7 +3,7 @@ import { Token } from 'ngx-stripe';
 import { PaymentMethod } from 'src/app/models/billing';
 import { BillingService } from '../billing.service';
 import { RlAPIService } from 'src/app/rl-api.service';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { LoggerService } from 'src/app/logger.service';
 
 @Component({
   selector: 'app-billing-payment-methods',
@@ -15,7 +15,7 @@ export class BillingPaymentMethodsComponent implements OnInit {
   constructor(
     private billingService: BillingService,
     private api: RlAPIService,
-    private snackBar: MatSnackBar) { }
+    private logger: LoggerService) { }
 
   paymentMethods = [];
   stripeToken: Token;
@@ -45,7 +45,7 @@ export class BillingPaymentMethodsComponent implements OnInit {
   deletePaymentMethod(method: PaymentMethod, index: number) {
 
     if (method.IsDefault) {
-      return this.snackBar.open('You cannot delete your default payment method.', 'Okay', {duration: 2000});
+      return this.logger.Error('You cannot delete your default payment method.', 'Okay', 2000);
     }
 
     this.api.deletePaymentMethod(method.Id).subscribe(() => {

@@ -4,7 +4,7 @@ import {ErrorStateMatcher} from '@angular/material/core';
 import { ActivateService } from '../activate/activate.service';
 import {Router} from '@angular/router';
 import { CustomErrorStateMatcher } from '../activation.component';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { LoggerService } from 'src/app/logger.service';
 
 @Component({
   selector: 'app-activation-email',
@@ -22,7 +22,7 @@ export class ActivationEmailComponent implements OnInit {
   email: string;
 
 
-  constructor(router: Router, activateService: ActivateService, private snackBar: MatSnackBar) {
+  constructor(router: Router, activateService: ActivateService, private logger: LoggerService) {
     this.router = router;
     this.email = '';
     this.activate = activateService;
@@ -48,9 +48,7 @@ export class ActivationEmailComponent implements OnInit {
           return;
         }
 
-        this.snackBar.open('That email is not available.', 'Okay', {
-          duration: 2000,
-        });
+        this.logger.Error('That email is not available.', 'Okay', 2000);
       },
       error  => {
         console.log('Error', error);
