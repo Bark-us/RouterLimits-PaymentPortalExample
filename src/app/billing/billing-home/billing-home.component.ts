@@ -49,11 +49,13 @@ export class BillingHomeComponent implements OnInit {
       this.isAccountActive = acct.Active;
 
       if (!this.defaultPaymentMethod) {
-        this.logger.Caution('Account Activation Incomplete: \nYou must have a valid payment method to continue.', 'Okay', 10000);
-        return this.router.navigateByUrl('/billing/payment');
+        // tslint:disable-next-line: max-line-length
+        this.logger.Caution('Account Activation Incomplete: \nYou must enter a valid payment method to login to your account.', 'Okay', 10000);
+        // return this.router.navigateByUrl('/billing/payment');
+        // return false;
       } else if (!this.currentPlanString || this.currentPlanString === this.NO_PLAN_STRING || !this.isAccountActive) {
         this.logger.Caution('Account Activation Incomplete: \nSelect a plan to activate your account.', 'Okay', 10000);
-        return this.router.navigateByUrl('/billing/subscriptions');
+        // return this.router.navigateByUrl('/billing/subscriptions');
       }
 
       this.loaded = true;

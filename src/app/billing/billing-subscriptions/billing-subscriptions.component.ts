@@ -29,14 +29,17 @@ export class BillingSubscriptionsComponent implements OnInit {
   selectedPlanName: string;
   account: Account;
   loaded = false;
-
+  defaultPaymentMethod = null;
   plans: Plan[] = [];
+
   ngOnInit() {
     const one = this.billingService.GetAvailablePlansAsync(null);
     const two = this.billingService.GetAccountAsync();
-    forkJoin(one, two).subscribe(results => {
+    const three = this.billingService.GetDefaultPaymentMethodAsync();
+    forkJoin(one, two, three).subscribe(results => {
       this.plans = [];
       const acct = results[1];
+      this.defaultPaymentMethod = results[2];
 
       results[0].forEach(p => {
         if (isNullOrUndefined(p.Unavailable) || p.Unavailable === false) {
@@ -67,6 +70,13 @@ export class BillingSubscriptionsComponent implements OnInit {
   }
 
   changePlan(): void {
+
+    if (!this.defaultPaymentMethod) {
+        const snackMsg = 'You must enter payment information before you can change plans.';
+        this.logger.Error(snackMsg, 'Okay', 4000);
+        this.router.navigateByUrl('/billing/payment');
+        return;
+    }
 
     const updateReq = new AccountUpdateRequest({planId: this.selectedPlan});
     this.plans.forEach(element => {
