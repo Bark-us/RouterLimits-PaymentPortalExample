@@ -9,6 +9,7 @@ import { Router } from '@angular/router';
 export class AuthService {
 
   isAuthenticating = false;
+  isInApp = false;
   auth: BillingAuthResponse;
 
   constructor(

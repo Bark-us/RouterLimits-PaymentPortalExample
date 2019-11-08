@@ -4,6 +4,7 @@ import { PaymentMethod } from 'src/app/models/billing';
 import { BillingService } from '../billing.service';
 import { RlAPIService } from 'src/app/rl-api.service';
 import { LoggerService } from 'src/app/logger.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-billing-payment-methods',
@@ -15,7 +16,8 @@ export class BillingPaymentMethodsComponent implements OnInit {
   constructor(
     private billingService: BillingService,
     private api: RlAPIService,
-    private logger: LoggerService) { }
+    private logger: LoggerService,
+    private router: Router) { }
 
   paymentMethods = [];
   stripeToken: Token;
@@ -68,5 +70,9 @@ export class BillingPaymentMethodsComponent implements OnInit {
     this.billingService.GetAvailablePaymentMethodsAsync(true).subscribe(pmt => {
       this.paymentMethods = pmt;
     });
+  }
+
+  returnHome(): void {
+    this.router.navigateByUrl('billing');
   }
 }

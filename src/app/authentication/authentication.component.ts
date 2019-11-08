@@ -52,6 +52,10 @@ export class AuthenticationComponent implements OnInit {
         }
 
         switch (action) {
+          case 'AppMenu':
+            this.authService.isInApp = true;
+            return this.router.navigateByUrl(routeURL);
+            break;
           case 'UpdatePaymentInformation':
             this.router.navigateByUrl('/billing/payment');
             break;
