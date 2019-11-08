@@ -9,14 +9,17 @@ import { AuthService } from 'src/app/authentication/auth/auth.service';
 })
 export class NavbarComponent implements OnInit {
 
-  constructor(private router: Router, private authService: AuthService) { }
+  hideNav: boolean;
 
-  hideNav = this.authService.isInApp;
+  constructor(private router: Router, private authService: AuthService) {
+    this.hideNav = this.authService.isInApp;
+   }
 
   @Input() backText = 'Back';
   @Input() routeUrl = '/billing/home';
   @Input() noReturn = false;
   ngOnInit() {
+    this.hideNav = this.authService.isInApp;
   }
 
   navArrowClicked() {
