@@ -1,5 +1,5 @@
-<app-navbar backText="Home" routeUrl="/billing"></app-navbar>
-<div class="payment-page" fxLayout="row" fxLayoutAlign="center center">
+<app-navbar noReturn="true"></app-navbar>
+<div class="payment-page top-buffer" fxLayout="row" fxLayoutAlign="center center">
   <mat-card fxFlex.gt-md="30" fxFlex.xs="95" fxFlex.sm="80" fxFlex.md="50">
     <h2>Payment methods</h2>
     <h3>Add a new card</h3>
@@ -36,4 +36,9 @@
         </div>
     </div>
   </mat-card>
+</div>
+<div fxLayout="row" fxLayoutAlign="center center">
+  <div fxFlex.gt-md="100" fxFlex.sm-md="80" fxFlex.md="50" fxFlex.gt-md="25" class="under-box-btn" fxLayout="row" fxLayoutAlign="center start" fxFlexFill>
+    <button mat-button color="default" class="full-width" (click)="returnHome()">Billing home</button>
+  </div>
 </div>
