@@ -92,7 +92,9 @@ export class ActivationSignupComponent implements OnInit {
       return this.router.navigateByUrl('activate/subscriptions');
     })
     .catch((err) => {
-      if (err.error && err.error.message) {
+      if (err.status === 400 && err.statusText) {
+        return this.openSnackBar(err.statusText, 'Okay', 10000);
+      } else if (err.error && err.error.message) {
         return this.openSnackBar(err.error.message, 'Okay', 10000);
       }
     });
